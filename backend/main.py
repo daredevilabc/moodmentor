@@ -68,7 +68,13 @@ async def lifespan(app: FastAPI):
     if missing:
         logger.error(f"Missing required environment variables: {missing}")
         raise RuntimeError(f"Missing required environment variables: {', '.join(missing)}")
-    await init_db()
+    
+    if os.getenv("RUNNING_UNDER_GUNICORN") != "true":
+        await init_db()
+        logger.info("Database initialized locally")
+    else:
+        logger.info("Database initialization bypassed in worker process (handled by Gunicorn master)")
+        
     logger.info("Application startup complete")
     yield
     logger.info("Application shutdown")
