@@ -19,6 +19,9 @@ DATABASE_URL = os.getenv(
     "sqlite+aiosqlite:///./moodmentor.db"
 )
 
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+
 
 class GUID(TypeDecorator):
     impl = CHAR(36)
