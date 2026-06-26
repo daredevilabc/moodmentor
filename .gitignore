@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+__pycache__
+*.pyc
+.DS_Store
+certs/
+*.pyo
+.pytest_cache/
+.vscode/
+.idea/
+*.egg-info/
+venv/
+.venv/
+*.db
+backend/venv/
+backend/moodmentor.db

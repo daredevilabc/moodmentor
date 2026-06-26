@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "20"
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run backend tests
+        run: cd backend && pytest -v
+        env:
+          GEMINI_API_KEY: test_key
+          API_KEY: test_api_key
+          DISABLE_RATE_LIMIT: "true"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+
+      - name: Build frontend
+        run: cd frontend && npm run build
+        env:
+          VITE_SENTRY_DSN: ""
+
+      - name: Verify backend starts
+        run: cd backend && python -c "
+import os
+os.environ['GEMINI_API_KEY'] = 'test_key'
+os.environ['API_KEY'] = 'test_api_key'
+os.environ['DISABLE_RATE_LIMIT'] = 'true'
+from main import app
+print('Backend imports and initializes successfully')
+"

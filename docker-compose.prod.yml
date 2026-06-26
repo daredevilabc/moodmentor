@@ -1,0 +1,28 @@
+services:
+  backend:
+    env_file:
+      - .env
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN}
+      SENTRY_ENVIRONMENT: production
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-4}
+      LOG_LEVEL: INFO
+      LOG_FORMAT: json
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./frontend/nginx.https.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/letsencrypt:ro
+    environment:
+      - VITE_SENTRY_DSN=${SENTRY_DSN}
+    build:
+      args:
+        - VITE_SENTRY_DSN=${SENTRY_DSN}

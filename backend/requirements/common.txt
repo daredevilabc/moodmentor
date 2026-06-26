@@ -1,0 +1,10 @@
+fastapi==0.136.1
+uvicorn[standard]==0.47.0
+python-dotenv==1.2.2
+google-generativeai==0.8.6
+httpx==0.28.1
+pydantic==2.13.4
+slowapi==0.1.10
+sqlalchemy==2.0.34
+alembic==1.13.1
+sentry-sdk==2.22.0

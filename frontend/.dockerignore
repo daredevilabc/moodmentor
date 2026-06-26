@@ -1,0 +1,15 @@
+node_modules
+dist
+build
+.env
+*.log
+*.md
+.git
+.gitignore
+docker-compose.yml
+Dockerfile
+.dockerignore
+nginx.conf
+.vite
+.eslintrc*
+.prettierrc*

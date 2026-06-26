@@ -1,0 +1,4 @@
+-r common.txt
+
+asyncpg==0.29.0
+gunicorn==23.0.0
