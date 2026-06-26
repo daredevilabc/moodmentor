@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: moodmentor-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerContext: backend
+    plan: free
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: moodmentor-db
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        value: "*"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: DISABLE_RATE_LIMIT
+        value: "true"
+
+databases:
+  - name: moodmentor-db
+    plan: free
