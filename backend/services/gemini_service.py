@@ -18,7 +18,7 @@ class GeminiService:
         if not api_key or api_key == "your_gemini_api_key_here":
             raise ValueError("GEMINI_API_KEY not set in environment variables")
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-3.5-flash")
+        self.model = genai.GenerativeModel("gemini-1.5-flash")
 
     def _format_news(self, news: list) -> str:
         if not news:
